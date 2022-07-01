@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "transcriber_telegrambot"
+version = "0.1.0"
+description = ""
+authors = ["adrianvillanueva997 <adrianvillanueva997@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+asyncio = "^3.4.3"
+python-telegram-bot = "^20.0a2"
+rich = "^12.4.4"
+pydub = "^0.25.1"
+ffmpeg-python = "^0.2.0"
+vosk = "^0.3.42"
+python-dotenv = "^0.20.0"
+
+
+[tool.poetry.dev-dependencies]
+black = "^22.6.0"
+isort = "^5.10.1"
+mypy = "^0.961"
+pytest = "^7.1.2"
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
