@@ -12,7 +12,7 @@ rich = "^12.5.1"
 pydub = "^0.25.1"
 ffmpeg-python = "^0.2.0"
 vosk = "^0.3.43"
-python-dotenv = "^0.20.0"
+python-dotenv = "^0.21.0"
 
 
 [tool.poetry.dev-dependencies]
