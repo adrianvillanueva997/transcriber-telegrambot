@@ -14,6 +14,9 @@ ffmpeg-python = "^0.2.0"
 vosk = "^0.3.44"
 python-dotenv = "^0.21.0"
 prometheus-client = "^0.14.1"
+pip = "^22.2.2"
+setuptools = "^65.4.1"
+wheel = "^0.37.1"
 
 
 [tool.poetry.dev-dependencies]
