@@ -3,7 +3,6 @@ import os
 import subprocess
 from shutil import ExecError
 
-from dotenv import load_dotenv
 from prometheus_client import start_http_server
 from rich.logging import RichHandler
 from telegram import Update
@@ -52,7 +51,6 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 def main() -> None:
-    load_dotenv()
     """Start the bot."""
     # Create the Application and pass it your bot's token.
     application = Application.builder().token(os.environ["bot_token"]).build()
