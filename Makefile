@@ -3,4 +3,4 @@ run:
 prod:
 	poetry run python src/transcriber_telegrambot/main.py
 installdeps:
-	poetry install --no-dev --no-root
+	poetry install 
