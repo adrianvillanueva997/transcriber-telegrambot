@@ -4,6 +4,7 @@ import subprocess
 from shutil import ExecError
 
 from dotenv import load_dotenv
+from prometheus_client import start_http_server
 from rich.logging import RichHandler
 from telegram import Update
 from telegram.ext import (
@@ -67,4 +68,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    start_http_server(2112)
     main()

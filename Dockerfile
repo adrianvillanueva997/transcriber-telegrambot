@@ -16,4 +16,5 @@ FROM poetry as prod
 WORKDIR /app
 COPY . .
 RUN make installdeps
+EXPOSE 2112
 CMD ["make", "prod"]
