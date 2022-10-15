@@ -14,7 +14,7 @@ ffmpeg-python = "^0.2.0"
 vosk = "^0.3.44"
 prometheus-client = "^0.15.0"
 pip = "^22.2.2"
-setuptools = "^65.4.1"
+setuptools = "^65.5.0"
 wheel = "^0.37.1"
 
 
