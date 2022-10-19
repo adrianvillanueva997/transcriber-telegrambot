@@ -8,11 +8,11 @@ authors = ["adrianvillanueva997 <adrianvillanueva997@gmail.com>"]
 python = ">= 3.10 <4"
 asyncio = "^3.4.3"
 python-telegram-bot = "^20.0a2"
-rich = "^12.6.0"
 pydub = "^0.25.1"
 ffmpeg-python = "^0.2.0"
 vosk = "^0.3.44"
 prometheus-client = "^0.14.1"
+loguru = "^0.6.0"
 
 
 [tool.poetry.dev-dependencies]

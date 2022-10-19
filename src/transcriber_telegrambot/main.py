@@ -1,10 +1,8 @@
-import logging
-import os
 import subprocess
+import os
 from shutil import ExecError
-
+from loguru import logger
 from prometheus_client import start_http_server
-from rich.logging import RichHandler
 from telegram import Update
 from telegram.ext import (
     Application,
@@ -14,40 +12,36 @@ from telegram.ext import (
     filters,
 )
 
-# Enable logging
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO,
-    handlers=[RichHandler()],
-)
-logger = logging.getLogger(__name__)
-
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /help is issued."""
     await update.message.reply_text("Help!")
 
 
-async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Echo the user message."""
-    voice_file = await context.bot.get_file(update.message.voice.file_id)
-    logging.info(update.message.voice)
-    await voice_file.download("audio.ogg")
-    try:
-        output = subprocess.run(
-            ["vosk-transcriber", "-l", "es", "-i", "audio.ogg", "-o", "output.txt"],
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-        )
-        if output.returncode == 0:
-            with open("output.txt", "r") as file:
-                content = file.read()
-                await update.message.reply_text(
-                    text=content, reply_to_message_id=update.message.id
-                )
-    except ExecError as e:
-        logging.warning(e)
+async def transcribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Transcribres the user message."""
+    if hasattr(update.message.voice, "file_id"):
+        voice_file = await context.bot.get_file(update.message.voice.file_id)
+        logger.info(update.message.voice)
+        await voice_file.download("audio.ogg")
+        try:
+            output = subprocess.run(
+                ["vosk-transcriber", "-l", "es", "-i", "audio.ogg", "-o", "output.txt"],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+            )
+            if output.returncode == 0:
+                with open("output.txt", "r") as file:
+                    content = file.read()
+                    try:
+                        await update.message.reply_text(
+                            text=content, reply_to_message_id=update.message.id
+                        )
+                    except Exception as e:
+                        logger.error(e)
+        except ExecError as e:
+            logger.error(e)
 
 
 def main() -> None:
@@ -59,7 +53,7 @@ def main() -> None:
     application.add_handler(CommandHandler("help", help_command))
 
     # on non command i.e message - echo the message on Telegram
-    application.add_handler(MessageHandler(~filters.COMMAND, echo))
+    application.add_handler(MessageHandler(~filters.COMMAND, transcribe))
 
     # Run the bot until the user presses Ctrl-C
     application.run_polling()
@@ -67,4 +61,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     start_http_server(2112)
+    logger.info("Bot running!")
     main()
