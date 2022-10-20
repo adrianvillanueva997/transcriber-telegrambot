@@ -11,7 +11,7 @@ python-telegram-bot = "^20.0a2"
 pydub = "^0.25.1"
 ffmpeg-python = "^0.2.0"
 vosk = "^0.3.44"
-prometheus-client = "^0.14.1"
+prometheus-client = "^0.15.0"
 loguru = "^0.6.0"
 
 
