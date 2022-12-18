@@ -1,6 +1,7 @@
-import subprocess
 import os
+import subprocess
 from shutil import ExecError
+
 from loguru import logger
 from prometheus_client import start_http_server
 from telegram import Update

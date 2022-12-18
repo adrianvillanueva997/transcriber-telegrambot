@@ -20,6 +20,8 @@ black = "^22.12.0"
 isort = "^5.11.2"
 mypy = "^0.991"
 pytest = "^7.2.0"
+pylama = "^8.4.1"
+bandit = "^1.7.4"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
