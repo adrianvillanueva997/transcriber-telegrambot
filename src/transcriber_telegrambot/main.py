@@ -4,7 +4,7 @@ from shutil import ExecError
 
 from loguru import logger
 from prometheus_client import start_http_server
-from telegram import Update
+from telegram import File, Update
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -22,9 +22,9 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 async def transcribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Transcribres the user message."""
     if hasattr(update.message.voice, "file_id"):
-        voice_file = await context.bot.get_file(update.message.voice.file_id)
+        voice_file: File = await context.bot.get_file(update.message.voice.file_id)
         logger.info(update.message.voice)
-        await voice_file.download("audio.ogg")
+        await voice_file.download_to_drive("audio.ogg")
         try:
             output = subprocess.run(
                 ["vosk-transcriber", "-l", "es", "-i", "audio.ogg", "-o", "output.txt"],
