@@ -1,21 +1,34 @@
-FROM python:3.11.3-slim-buster as base
+# Multistage docker image building
+# build-env -> prod
 
-ENV PYTHONFAULTHANDLER=1 \
-  PYTHONHASHSEED=random \
-  PYTHONUNBUFFERED=1
-RUN apt-get update && apt-get install -y build-essential python-pkg-resources ffmpeg flac
+FROM python:3.11.2-slim-buster as build-env
+
+# Install build dependencies
+RUN apt-get update \
+  && apt-get install -y build-essential python-pkg-resources ffmpeg flac \
+  && rm -rf /var/lib/apt/lists/*
+
+# Install Poetry
 RUN pip install --upgrade pip &&  pip install poetry
 
-FROM base as prod
-WORKDIR /app
-COPY pyproject.toml poetry.lock ./
-RUN pip install --upgrade pip && pip install poetry
-RUN poetry install --no-dev --no-root
+# Copy only the dependency files
+COPY pyproject.toml poetry.lock /app/
 
-# Runtime stage
-FROM python:3.11.2-slim-buster AS runtime
+# Install dependencies in a virtual environment
 WORKDIR /app
-RUN apt-get update && apt-get install -y ffmpeg flac && rm -rf /var/lib/apt/lists/*
-COPY --from=build /app /app
+RUN poetry config virtualenvs.create false \
+  && poetry install --no-root --no-dev
+
+# Second stage
+FROM python:3.11.2-slim-buster as prod
+
+# Copy installed dependencies from previous stage
+COPY --from=build-env /usr/local /usr/local
+
+# Copy project files
+WORKDIR /app
+COPY . .
+
+# Expose port and set command
 EXPOSE 2112
 CMD ["make", "prod"]
