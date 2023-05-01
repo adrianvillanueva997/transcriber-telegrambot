@@ -1,7 +1,7 @@
 # Multistage docker image building
 # build-env -> prod
 
-FROM python:3.11.2-slim-buster as build-env
+FROM python:3.11.2-slim-buster AS build-env
 
 # Install build dependencies
 RUN apt-get update \
@@ -9,7 +9,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Poetry
-RUN pip install --upgrade pip &&  pip install poetry
+RUN pip install --upgrade --no-cache-dir pip &&  pip install --no-cache-dir poetry
 
 # Copy only the dependency files
 COPY pyproject.toml poetry.lock /app/
@@ -20,7 +20,7 @@ RUN poetry config virtualenvs.create false \
   && poetry install --no-root --no-dev
 
 # Second stage
-FROM python:3.11.2-slim-buster as prod
+FROM python:3.11.2-slim-buster AS prod
 
 # Copy installed dependencies from previous stage
 COPY --from=build-env /usr/local /usr/local
