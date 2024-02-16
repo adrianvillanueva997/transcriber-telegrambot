@@ -11,7 +11,6 @@ use teloxide::Bot;
 use tokio::fs;
 use transcription::transcript::AUDIO;
 
-// const AUDIO: &str = "audio.ogg";
 mod transcription;
 
 pub async fn parse_voice_messages(bot: &Bot, message: &Message, voice_message: &Voice) {
